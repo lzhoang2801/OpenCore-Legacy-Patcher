@@ -753,11 +753,29 @@
 				<key>Enabled</key>
 				<false/>
 				<key>MaxKernel</key>
-				<string></string>
+				<string>24.99.99</string>
 				<key>MinKernel</key>
 				<string></string>
 				<key>BundlePath</key>
 				<string>USB-Map.kext</string>
+				<key>ExecutablePath</key>
+				<string></string>
+				<key>PlistPath</key>
+				<string>Contents/Info.plist</string>
+			</dict>
+			<dict>
+				<key>Arch</key>
+				<string>x86_64</string>
+				<key>Comment</key>
+				<string>USB Map for Tahoe</string>
+				<key>Enabled</key>
+				<false/>
+				<key>MaxKernel</key>
+				<string></string>
+				<key>MinKernel</key>
+				<string>25.0.0</string>
+				<key>BundlePath</key>
+				<string>USB-Map-Tahoe.kext</string>
 				<key>ExecutablePath</key>
 				<string></string>
 				<key>PlistPath</key>
@@ -2013,6 +2031,36 @@
 				<integer>0</integer>
 			</dict>
 			<dict>
+                <key>Arch</key>
+                <string>x86_64</string>
+                <key>Base</key>
+                <string>__ZN11IOHIDDevice12didTerminateEP9IOServicejPb</string>
+                <key>Comment</key>
+                <string>Fix IOHIDFamily USB topcase panic</string>
+                <key>Count</key>
+                <integer>0</integer>
+                <key>Enabled</key>
+                <false/>
+                <key>Find</key>
+                <data></data>
+                <key>Identifier</key>
+                <string>com.apple.iokit.IOHIDFamily</string>
+                <key>Limit</key>
+                <integer>0</integer>
+                <key>Mask</key>
+                <data></data>
+                <key>MaxKernel</key>
+                <string></string>
+                <key>MinKernel</key>
+                <string>25.0.0</string>
+                <key>Replace</key>
+                <data>uAEAAADD</data>
+                <key>ReplaceMask</key>
+                <data></data>
+                <key>Skip</key>
+                <integer>0</integer>
+            </dict>
+			<dict>
 				<key>Arch</key>
 				<string>x86_64</string>
 				<key>Base</key>
@@ -2842,7 +2890,7 @@
 		<key>APFS</key>
 		<dict>
 			<key>EnableJumpstart</key>
-			<true/>
+			<false/>
 			<key>GlobalConnect</key>
 			<false/>
 			<key>HideVerbose</key>
@@ -2929,6 +2977,18 @@
 				<string></string>
 				<key>Path</key>
 				<string>OpenCanopy.efi</string>
+				<key>Enabled</key>
+				<false/>
+				<key>Arguments</key>
+				<string></string>
+				<key>LoadEarly</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>Comment</key>
+				<string></string>
+				<key>Path</key>
+				<string>apfs_aligned.efi</string>
 				<key>Enabled</key>
 				<false/>
 				<key>Arguments</key>

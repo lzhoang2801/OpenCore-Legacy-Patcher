@@ -197,7 +197,7 @@ class BuildFirmware:
         # HID patches
         if smbios_data.smbios_dictionary[self.model]["CPU Generation"] <= cpu_data.CPUGen.penryn.value:
             logging.info("- Adding IOHIDFamily patch")
-            support.BuildSupport(self.model, self.constants, self.config).get_item_by_kv(self.config["Kernel"]["Patch"], "Identifier", "com.apple.iokit.IOHIDFamily")["Enabled"] = True
+            support.BuildSupport(self.model, self.constants, self.config).get_item_by_kv(self.config["Kernel"]["Patch"], "Comment", "Patch IOHIDFamily")["Enabled"] = True
 
         # MacPro3,1/Xserve2,1 cannot boot with more than 4 threads in Sequoia
         # Note cpus=4 only overrides if more than 4 threads are present. So same on dual-core units
@@ -215,6 +215,14 @@ class BuildFirmware:
             return
         if not "CPU Generation" in smbios_data.smbios_dictionary[self.model]:
             return
+
+        # APFS check
+        # The macOS 26 APFS EFI driver's FileVault 2 implementation is broken, and
+        # must be replaced with the macOS 15 APFS EFI driver.
+        logging.info("- Enabling macOS 26 FileVault 2 support")
+        self.config["UEFI"]["APFS"]["EnableJumpstart"] = False
+        shutil.copy(self.constants.sequoia_apfs_driver_path, self.constants.drivers_path)
+        support.BuildSupport(self.model, self.constants, self.config).get_efi_binary_by_path("apfs_aligned.efi", "UEFI", "Drivers")["Enabled"] = True
 
         # Exfat check
         if smbios_data.smbios_dictionary[self.model]["CPU Generation"] < cpu_data.CPUGen.sandy_bridge.value:

@@ -55,7 +55,7 @@ exe = EXE(pyz,
           upx=True,
           console=False,
           disable_windowed_traceback=False,
-          target_arch="universal2",
+          target_arch="x86_64",
           codesign_identity=None,
           entitlements_file=None)
 
@@ -83,4 +83,5 @@ app = BUNDLE(coll,
                 "Build Date": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
                 "BuildMachineOSBuild": subprocess.run(["/usr/bin/sw_vers", "-buildVersion"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT).stdout.decode().strip(),
                 "NSPrincipalClass": "NSApplication",
+                "CFBundleIconName": "oclp",
              })
