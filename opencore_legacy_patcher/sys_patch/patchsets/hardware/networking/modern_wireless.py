@@ -52,6 +52,53 @@ class ModernWireless(BaseHardware):
         """
         return HardwareVariant.NETWORKING
 
+    def _base_patch(self) -> dict:
+        """
+        Base patches for Modern Wireless
+        """
+        return {
+            "Modern Wireless": {
+                PatchType.OVERWRITE_SYSTEM_VOLUME: {
+                    "/usr/libexec": {
+                        "wifip2pd": f"13.7.2-{self._xnu_major}",
+                    },
+                    "/System/Library/CoreServices": {
+                        **({ "WiFiAgent.app": "14.7.2" } if self._xnu_major >= os_data.sequoia else {}),
+                    },
+                },
+                PatchType.MERGE_SYSTEM_VOLUME: {
+                    "/System/Library/PrivateFrameworks": {
+                        "IO80211.framework":        f"13.7.2-{self._xnu_major}",
+                        "WiFiPeerToPeer.framework": f"13.7.2-{self._xnu_major}",
+                    },
+                }
+            },
+        }
+
+    def _extended_patch(self) -> dict:
+        """
+        Extended patches for Modern Wireless
+        """
+        if self._xnu_major > os_data.sonoma:
+            return {}
+
+        return {
+            "Modern Wireless Extended": {
+                PatchType.OVERWRITE_SYSTEM_VOLUME: {
+                    "/usr/libexec": {
+                        "airportd": f"13.7.2-{self._xnu_major}",
+                    },
+                },
+                PatchType.MERGE_SYSTEM_VOLUME: {
+                    "/System/Library/Frameworks": {
+                        "CoreWLAN.framework": f"13.7.2-{self._xnu_major}",
+                    },
+                    "/System/Library/PrivateFrameworks": {
+                        "CoreWiFi.framework":       f"13.7.2-{self._xnu_major}",
+                    },
+                }
+            },
+        }
 
     def patches(self) -> dict:
         """
@@ -61,25 +108,6 @@ class ModernWireless(BaseHardware):
             return {}
 
         return {
-            "Modern Wireless": {
-                PatchType.OVERWRITE_SYSTEM_VOLUME: {
-                    "/usr/libexec": {
-                        "airportd": f"13.7.2-{self._xnu_major}",
-                        "wifip2pd": f"13.7.2-{self._xnu_major}",
-                    },
-                    "/System/Library/CoreServices": {
-                        **({ "WiFiAgent.app": "14.7.2" } if self._xnu_major >= os_data.sequoia else {}),
-                    },
-                },
-                PatchType.MERGE_SYSTEM_VOLUME: {
-                    "/System/Library/Frameworks": {
-                        "CoreWLAN.framework": f"13.7.2-{self._xnu_major}",
-                    },
-                    "/System/Library/PrivateFrameworks": {
-                        "CoreWiFi.framework":       f"13.7.2-{self._xnu_major}",
-                        "IO80211.framework":        f"13.7.2-{self._xnu_major}",
-                        "WiFiPeerToPeer.framework": f"13.7.2-{self._xnu_major}",
-                    },
-                }
-            },
+            **self._base_patch(),
+            **self._extended_patch(),
         }
